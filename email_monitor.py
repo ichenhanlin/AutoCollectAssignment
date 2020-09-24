@@ -145,9 +145,9 @@ def monitorEmail():
             # reply emails
             if not res:
                 logging.error('Error email [{}] from [{}]'.format(headers['Subject'], headers['From']))
-                smtp_server.sendmail(EMAIL, headers['FromAddr'], rejectEmail(headers['From']).as_string())
+                smtp_server.sendmail(EMAIL, [headers['FromAddr']], rejectEmail(headers['From']).as_string())
             else:
-                smtp_server.sendmail(EMAIL, headers['FromAddr'], accpetEmail(headers['From']).as_string())
+                smtp_server.sendmail(EMAIL, [headers['FromAddr']], accpetEmail(headers['From']).as_string())
             logging.info("handle No.{} email complete.".format(i))
 
         # save current handle emails
@@ -159,4 +159,8 @@ def monitorEmail():
         smtp_server.quit()
 
 if __name__ == "__main__":
-    monitorEmail()
+    while True:
+        try:
+            monitorEmail()
+        except Exception() as e:
+            time.sleep(60*10)
